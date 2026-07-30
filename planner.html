@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>BT Transport — Maintenance Planner</title>
+<style>
+  :root{--navy:#071d3a;--navy2:#0d2b52;--gold:#caa344;--ink:#1a2436;--green:#1f9d55;--amber:#e08a00;--red:#d23a3a;--line:#e4e8ee;--muted:#6b7787;--bg:#eef1f5;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:var(--bg);color:var(--ink);}
+  .app{width:1280px;}
+  .topbar{height:60px;background:var(--navy);display:flex;align-items:center;padding:0 22px;gap:14px;}
+  .topbar img{height:40px;width:40px;border-radius:6px;object-fit:cover;border:1px solid rgba(202,163,68,.5);}
+  .topbar .ttl{color:#fff;font-weight:600;font-size:17px}.topbar .ttl span{color:var(--gold)}
+  .topbar .env{margin-left:auto;display:flex;align-items:center;gap:16px;color:#9fb0c6;font-size:13px}
+  .topbar .env b{color:#fff}.topbar .badge{background:rgba(255,255,255,.08);padding:5px 11px;border-radius:20px;color:#cdd8e6;font-size:12px}
+  .wrap{display:flex}
+  .side{width:210px;background:var(--navy2);min-height:660px;padding:14px 0}
+  .side a{display:flex;align-items:center;gap:10px;color:#b9c6d8;text-decoration:none;padding:11px 20px;font-size:14px;border-left:3px solid transparent}
+  .side a .ic{width:18px;text-align:center}
+  .side a.on{background:rgba(202,163,68,.13);color:#fff;border-left-color:var(--gold);font-weight:600}
+  .main{flex:1;padding:20px 24px}
+  .head{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+  .h1{font-size:20px;font-weight:700;color:var(--navy)}
+  .sub{color:var(--muted);font-size:13px;margin-bottom:14px}
+  .monthnav{display:flex;align-items:center;gap:12px}
+  .monthnav .m{font-weight:700;color:var(--navy);font-size:15px}
+  .arrow{width:30px;height:30px;border:1px solid var(--line);background:#fff;border-radius:7px;display:flex;align-items:center;justify-content:center;color:#33404f;cursor:pointer}
+  .legend{display:flex;gap:16px;margin:0 0 12px;font-size:12px;color:#33404f;align-items:center}
+  .legend span{display:inline-flex;align-items:center;gap:6px}
+  .legend i{width:10px;height:10px;border-radius:3px;display:inline-block}
+  .cal{background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+  .dow{display:grid;grid-template-columns:repeat(7,1fr);background:#fafbfc;border-bottom:1px solid var(--line)}
+  .dow div{padding:9px 12px;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
+  .grid{display:grid;grid-template-columns:repeat(7,1fr)}
+  .cell{min-height:96px;border-right:1px solid #f0f2f6;border-bottom:1px solid #f0f2f6;padding:6px 7px;position:relative}
+  .cell:nth-child(7n){border-right:none}
+  .cell .dn{font-size:12px;color:#33404f;font-weight:600;margin-bottom:4px}
+  .cell.out .dn{color:#c3cbd6}
+  .cell.today{background:#fffdf5}
+  .cell.today .dn{color:var(--gold)}
+  .ev{font-size:11px;font-weight:600;padding:3px 6px;border-radius:5px;margin-bottom:3px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .ev.pmi{background:#e7f5ec;color:#137a3e}
+  .ev.mot{background:#e6eefb;color:#1c53a8}
+  .ev.brake{background:#fdf1de;color:#a55f00}
+  .ev.tacho{background:#efe7fb;color:#5b3ba8}
+  .ev.over{background:#fbe4e4;color:#b31f1f}
+  .more{font-size:10.5px;color:var(--muted);font-weight:600}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <img id="logo" alt="BT"/>
+    <div class="ttl">BT Transport <span>Management</span> — Fleet Compliance</div>
+    <div class="env"><span class="badge">Power Apps · Dataverse</span><span>Operator: <b>All operators</b></span><span>Beavan ▾</span></div>
+  </div>
+  <div class="wrap">
+    <nav class="side">
+      <a><span class="ic">▦</span> Dashboard</a>
+      <a><span class="ic">🚚</span> Fleet Register</a>
+      <a><span class="ic">🛻</span> Trailer Register</a>
+      <a class="on"><span class="ic">🗓</span> Maintenance Planner</a>
+      <a><span class="ic">🔧</span> Defects</a>
+      <a><span class="ic">🛑</span> Brake Tests</a>
+      <a><span class="ic">📄</span> MOT Register</a>
+      <a><span class="ic">🗂</span> Documents</a>
+      <a><span class="ic">📊</span> Reports</a>
+      <a><span class="ic">📝</span> Audit Log</a>
+    </nav>
+    <div class="main">
+      <div class="head">
+        <div><div class="h1">Maintenance Planner</div></div>
+        <div class="monthnav"><div class="arrow">‹</div><div class="m">August 2026</div><div class="arrow">›</div></div>
+      </div>
+      <div class="sub">Every inspection auto-scheduled from its cycle · 6-week PMI, MOT, brake test &amp; tacho all in one calendar</div>
+      <div class="legend">
+        <span><i style="background:#1f9d55"></i> PMI (safety inspection)</span>
+        <span><i style="background:#1c53a8"></i> MOT</span>
+        <span><i style="background:#e08a00"></i> Brake test</span>
+        <span><i style="background:#5b3ba8"></i> Tacho calibration</span>
+        <span><i style="background:#d23a3a"></i> Overdue</span>
+      </div>
+      <div class="cal">
+        <div class="dow"><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div><div>Sun</div></div>
+        <div class="grid">
+          <div class="cell out"><div class="dn">28</div></div>
+          <div class="cell out"><div class="dn">29</div></div>
+          <div class="cell out"><div class="dn">30</div><div class="ev over">LP18 ZED · PMI</div></div>
+          <div class="cell out"><div class="dn">31</div></div>
+          <div class="cell"><div class="dn">1</div></div>
+          <div class="cell"><div class="dn">2</div></div>
+          <div class="cell"><div class="dn">3</div></div>
+
+          <div class="cell"><div class="dn">4</div><div class="ev brake">YT68 WNS · Brake</div></div>
+          <div class="cell"><div class="dn">5</div><div class="ev pmi">LP18 ZED · PMI</div></div>
+          <div class="cell"><div class="dn">6</div></div>
+          <div class="cell"><div class="dn">7</div><div class="ev mot">RJ19 KLM · MOT</div></div>
+          <div class="cell"><div class="dn">8</div><div class="ev mot">TR-07 · Trlr MOT</div></div>
+          <div class="cell"><div class="dn">9</div></div>
+          <div class="cell"><div class="dn">10</div><div class="ev mot">RJ19 KLM · MOT</div></div>
+
+          <div class="cell"><div class="dn">11</div></div>
+          <div class="cell"><div class="dn">12</div></div>
+          <div class="cell"><div class="dn">13</div><div class="ev pmi">AB12 CDE · PMI</div><div class="ev brake">MV65 · Brake</div></div>
+          <div class="cell"><div class="dn">14</div></div>
+          <div class="cell"><div class="dn">15</div></div>
+          <div class="cell"><div class="dn">16</div></div>
+          <div class="cell"><div class="dn">17</div></div>
+
+          <div class="cell"><div class="dn">18</div><div class="ev pmi">GK70 TRV · PMI</div></div>
+          <div class="cell"><div class="dn">19</div></div>
+          <div class="cell"><div class="dn">20</div></div>
+          <div class="cell"><div class="dn">21</div><div class="ev pmi">NB22 · PMI</div></div>
+          <div class="cell"><div class="dn">22</div></div>
+          <div class="cell"><div class="dn">23</div></div>
+          <div class="cell"><div class="dn">24</div></div>
+
+          <div class="cell"><div class="dn">25</div><div class="ev tacho">GK70 · Tacho</div></div>
+          <div class="cell"><div class="dn">26</div><div class="ev pmi">YT68 WNS · PMI</div></div>
+          <div class="cell"><div class="dn">27</div></div>
+          <div class="cell"><div class="dn">28</div><div class="ev tacho">GK70 TRV · Tacho</div></div>
+          <div class="cell"><div class="dn">29</div><div class="ev pmi">NB22 QWE · PMI</div></div>
+          <div class="cell"><div class="dn">30</div></div>
+          <div class="cell"><div class="dn">31</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>fetch('logo_b64.txt').then(r=>r.text()).then(b=>{document.getElementById('logo').src='data:image/jpeg;base64,'+b.trim();});</script>
+</body>
+</html>

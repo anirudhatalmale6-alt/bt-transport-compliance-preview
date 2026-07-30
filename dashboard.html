@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>BT Transport — Compliance Dashboard</title>
+<style>
+  :root{
+    --navy:#071d3a; --navy2:#0d2b52; --gold:#caa344; --ink:#1a2436;
+    --green:#1f9d55; --amber:#e08a00; --red:#d23a3a; --line:#e4e8ee; --muted:#6b7787;
+    --bg:#eef1f5;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:var(--bg);color:var(--ink);}
+  .app{width:1280px;}
+  /* top bar */
+  .topbar{height:60px;background:var(--navy);display:flex;align-items:center;padding:0 22px;gap:14px;}
+  .topbar img{height:40px;width:40px;border-radius:6px;object-fit:cover;border:1px solid rgba(202,163,68,.5);}
+  .topbar .ttl{color:#fff;font-weight:600;font-size:17px;letter-spacing:.2px}
+  .topbar .ttl span{color:var(--gold)}
+  .topbar .env{margin-left:auto;display:flex;align-items:center;gap:16px;color:#9fb0c6;font-size:13px}
+  .topbar .env b{color:#fff;font-weight:600}
+  .topbar .badge{background:rgba(255,255,255,.08);padding:5px 11px;border-radius:20px;color:#cdd8e6;font-size:12px}
+  /* layout */
+  .wrap{display:flex}
+  .side{width:210px;background:var(--navy2);min-height:660px;padding:14px 0}
+  .side a{display:flex;align-items:center;gap:10px;color:#b9c6d8;text-decoration:none;padding:11px 20px;font-size:14px;border-left:3px solid transparent}
+  .side a .ic{width:18px;text-align:center;opacity:.9}
+  .side a.on{background:rgba(202,163,68,.13);color:#fff;border-left-color:var(--gold);font-weight:600}
+  .main{flex:1;padding:20px 24px}
+  .h1{font-size:20px;font-weight:700;color:var(--navy)}
+  .sub{color:var(--muted);font-size:13px;margin-top:2px;margin-bottom:16px}
+  /* kpi cards */
+  .kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-bottom:18px}
+  .kpi{background:#fff;border:1px solid var(--line);border-radius:10px;padding:13px 14px;position:relative;overflow:hidden}
+  .kpi .n{font-size:26px;font-weight:800;color:var(--navy);line-height:1}
+  .kpi .l{font-size:11.5px;color:var(--muted);margin-top:6px;text-transform:uppercase;letter-spacing:.4px}
+  .kpi .bar{position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--gold)}
+  .kpi.g .bar{background:var(--green)} .kpi.a .bar{background:var(--amber)} .kpi.r .bar{background:var(--red)}
+  .kpi .n.r{color:var(--red)} .kpi .n.a{color:var(--amber)} .kpi .n.g{color:var(--green)}
+  /* row split */
+  .cols{display:grid;grid-template-columns:1.65fr 1fr;gap:16px}
+  .card{background:#fff;border:1px solid var(--line);border-radius:10px}
+  .card h3{font-size:14px;font-weight:700;color:var(--navy);padding:13px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
+  .card h3 .see{font-size:12px;color:var(--gold);font-weight:600}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th{text-align:left;color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.4px;padding:9px 16px;border-bottom:1px solid var(--line)}
+  td{padding:10px 16px;border-bottom:1px solid #f0f2f6}
+  tr:last-child td{border-bottom:none}
+  .reg{font-weight:700;color:var(--navy)}
+  .pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:3px 10px;border-radius:20px}
+  .pill:before{content:"";width:7px;height:7px;border-radius:50%}
+  .pill.g{background:#e7f5ec;color:#137a3e}.pill.g:before{background:var(--green)}
+  .pill.a{background:#fdf1de;color:#a55f00}.pill.a:before{background:var(--amber)}
+  .pill.r{background:#fbe4e4;color:#b31f1f}.pill.r:before{background:var(--red)}
+  .days{font-weight:700}.days.r{color:var(--red)}.days.a{color:var(--amber)}.days.g{color:#2b3547}
+  /* alerts panel */
+  .alert{display:flex;gap:11px;padding:11px 16px;border-bottom:1px solid #f0f2f6;align-items:flex-start}
+  .alert:last-child{border-bottom:none}
+  .adot{width:9px;height:9px;border-radius:50%;margin-top:4px;flex:none}
+  .adot.r{background:var(--red)}.adot.a{background:var(--amber)}
+  .atxt{font-size:13px;color:#33404f;line-height:1.35}
+  .atxt b{color:var(--navy)}
+  .atime{font-size:11px;color:var(--muted);margin-top:2px}
+  /* compliance ring */
+  .ring-wrap{display:flex;align-items:center;gap:16px;padding:16px}
+  .ring{width:96px;height:96px;border-radius:50%;background:conic-gradient(var(--green) 0 96%, #edf0f4 96% 100%);display:flex;align-items:center;justify-content:center;flex:none}
+  .ring .inner{width:72px;height:72px;border-radius:50%;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .ring .pc{font-size:22px;font-weight:800;color:var(--navy)}
+  .ring .pl{font-size:10px;color:var(--muted)}
+  .rmeta div{font-size:13px;color:#33404f;margin-bottom:7px;display:flex;align-items:center;gap:8px}
+  .rmeta .k{font-weight:700;color:var(--navy)}
+  .tag{font-size:11px;font-weight:700;padding:2px 9px;border-radius:5px}
+  .tag.low{background:#e7f5ec;color:#137a3e}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <img id="logo" alt="BT"/>
+    <div class="ttl">BT Transport <span>Management</span> — Fleet Compliance</div>
+    <div class="env">
+      <span class="badge">Power Apps · Dataverse</span>
+      <span>Operator: <b>Northern Haulage Ltd</b></span>
+      <span>Beavan ▾</span>
+    </div>
+  </div>
+  <div class="wrap">
+    <nav class="side">
+      <a class="on"><span class="ic">▦</span> Dashboard</a>
+      <a><span class="ic">🚚</span> Fleet Register</a>
+      <a><span class="ic">🛻</span> Trailer Register</a>
+      <a><span class="ic">🗓</span> Maintenance Planner</a>
+      <a><span class="ic">🔧</span> Defects</a>
+      <a><span class="ic">🛑</span> Brake Tests</a>
+      <a><span class="ic">📄</span> MOT Register</a>
+      <a><span class="ic">🗂</span> Documents</a>
+      <a><span class="ic">📊</span> Reports</a>
+      <a><span class="ic">📝</span> Audit Log</a>
+    </nav>
+    <div class="main">
+      <div class="h1">Fleet Compliance Dashboard</div>
+      <div class="sub">Live view across all operators · updated automatically · Thursday 30 July 2026</div>
+
+      <div class="kpis">
+        <div class="kpi"><span class="bar"></span><div class="n">25</div><div class="l">Vehicles</div></div>
+        <div class="kpi a"><span class="bar"></span><div class="n a">2</div><div class="l">PMIs Due</div></div>
+        <div class="kpi g"><span class="bar"></span><div class="n g">0</div><div class="l">Overdue</div></div>
+        <div class="kpi a"><span class="bar"></span><div class="n a">1</div><div class="l">MOT Due</div></div>
+        <div class="kpi a"><span class="bar"></span><div class="n a">3</div><div class="l">Brake Tests Due</div></div>
+        <div class="kpi r"><span class="bar"></span><div class="n r">4</div><div class="l">Open Defects</div></div>
+      </div>
+
+      <div class="cols">
+        <div class="card">
+          <h3>Upcoming &amp; Overdue Inspections <span class="see">View planner →</span></h3>
+          <table>
+            <thead><tr><th>Reg</th><th>Fleet</th><th>Type</th><th>Next Due</th><th>Days</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td class="reg">AB12 CDE</td><td>101</td><td>PMI</td><td>13 Aug 26</td><td class="days a">14</td><td><span class="pill a">Due soon</span></td></tr>
+              <tr><td class="reg">RJ19 KLM</td><td>108</td><td>MOT</td><td>10 Aug 26</td><td class="days a">11</td><td><span class="pill a">Due soon</span></td></tr>
+              <tr><td class="reg">YT68 Wns</td><td>112</td><td>Brake Test</td><td>05 Aug 26</td><td class="days r">6</td><td><span class="pill r">Urgent</span></td></tr>
+              <tr><td class="reg">SD21 OPX</td><td>119</td><td>PMI</td><td>04 Sep 26</td><td class="days g">36</td><td><span class="pill g">On track</span></td></tr>
+              <tr><td class="reg">GK70 TRV</td><td>124</td><td>Tacho Calib.</td><td>28 Aug 26</td><td class="days g">29</td><td><span class="pill g">On track</span></td></tr>
+              <tr><td class="reg">TR14 — Trailer</td><td>T-07</td><td>Trailer MOT</td><td>08 Aug 26</td><td class="days a">9</td><td><span class="pill a">Due soon</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div>
+          <div class="card" style="margin-bottom:16px">
+            <h3>Overall Compliance</h3>
+            <div class="ring-wrap">
+              <div class="ring"><div class="inner"><div class="pc">96%</div><div class="pl">compliant</div></div></div>
+              <div class="rmeta">
+                <div><span class="k">OCRS risk</span><span class="tag low">LOW</span></div>
+                <div><span class="k">24</span> of 25 vehicles clear</div>
+                <div><span class="k">6-week</span> PMI cycle active</div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <h3>Reminders &amp; Alerts</h3>
+            <div class="alert"><span class="adot r"></span><div><div class="atxt"><b>YT68 WNS</b> brake test due in 6 days — book workshop</div><div class="atime">Reminder · 7-day trigger</div></div></div>
+            <div class="alert"><span class="adot a"></span><div><div class="atxt"><b>AB12 CDE</b> safety inspection (PMI) due in 14 days</div><div class="atime">Reminder · 14-day trigger</div></div></div>
+            <div class="alert"><span class="adot a"></span><div><div class="atxt"><b>RJ19 KLM</b> MOT expires 10 Aug — not yet booked</div><div class="atime">Reminder · 14-day trigger</div></div></div>
+            <div class="alert"><span class="adot r"></span><div><div class="atxt">4 open defects across fleet — 1 safety-critical</div><div class="atime">Defect tracker</div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  fetch('logo_b64.txt').then(r=>r.text()).then(b=>{document.getElementById('logo').src='data:image/jpeg;base64,'+b.trim();});
+</script>
+</body>
+</html>

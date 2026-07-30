@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>BT Transport — Fleet Register</title>
+<style>
+  :root{--navy:#071d3a;--navy2:#0d2b52;--gold:#caa344;--ink:#1a2436;--green:#1f9d55;--amber:#e08a00;--red:#d23a3a;--line:#e4e8ee;--muted:#6b7787;--bg:#eef1f5;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:var(--bg);color:var(--ink);}
+  .app{width:1280px;}
+  .topbar{height:60px;background:var(--navy);display:flex;align-items:center;padding:0 22px;gap:14px;}
+  .topbar img{height:40px;width:40px;border-radius:6px;object-fit:cover;border:1px solid rgba(202,163,68,.5);}
+  .topbar .ttl{color:#fff;font-weight:600;font-size:17px}.topbar .ttl span{color:var(--gold)}
+  .topbar .env{margin-left:auto;display:flex;align-items:center;gap:16px;color:#9fb0c6;font-size:13px}
+  .topbar .env b{color:#fff}.topbar .badge{background:rgba(255,255,255,.08);padding:5px 11px;border-radius:20px;color:#cdd8e6;font-size:12px}
+  .wrap{display:flex}
+  .side{width:210px;background:var(--navy2);min-height:660px;padding:14px 0}
+  .side a{display:flex;align-items:center;gap:10px;color:#b9c6d8;text-decoration:none;padding:11px 20px;font-size:14px;border-left:3px solid transparent}
+  .side a .ic{width:18px;text-align:center}
+  .side a.on{background:rgba(202,163,68,.13);color:#fff;border-left-color:var(--gold);font-weight:600}
+  .main{flex:1;padding:20px 24px}
+  .head{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+  .h1{font-size:20px;font-weight:700;color:var(--navy)}
+  .sub{color:var(--muted);font-size:13px;margin-bottom:16px}
+  .btn{background:var(--gold);color:#20170a;border:none;font-weight:700;font-size:13px;padding:9px 16px;border-radius:7px;cursor:pointer}
+  .toolbar{display:flex;gap:10px;margin-bottom:14px;align-items:center}
+  .search{flex:1;max-width:320px;background:#fff;border:1px solid var(--line);border-radius:7px;padding:8px 12px;font-size:13px;color:var(--muted)}
+  .filter{background:#fff;border:1px solid var(--line);border-radius:7px;padding:8px 12px;font-size:13px;color:#33404f}
+  .card{background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th{text-align:left;color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.4px;padding:11px 14px;border-bottom:1px solid var(--line);background:#fafbfc}
+  td{padding:11px 14px;border-bottom:1px solid #f0f2f6}
+  tr:last-child td{border-bottom:none}
+  tbody tr:hover{background:#fafcff}
+  .reg{font-weight:700;color:var(--navy)}
+  .pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:3px 10px;border-radius:20px}
+  .pill:before{content:"";width:7px;height:7px;border-radius:50%}
+  .pill.g{background:#e7f5ec;color:#137a3e}.pill.g:before{background:var(--green)}
+  .pill.a{background:#fdf1de;color:#a55f00}.pill.a:before{background:var(--amber)}
+  .pill.r{background:#fbe4e4;color:#b31f1f}.pill.r:before{background:var(--red)}
+  .tag{font-size:11px;font-weight:700;padding:2px 8px;border-radius:5px;background:#eef2f7;color:#42506a}
+  .tag.act{background:#e7f5ec;color:#137a3e}
+  .muted{color:var(--muted)}
+  .foot{display:flex;justify-content:space-between;align-items:center;padding:11px 14px;font-size:12px;color:var(--muted);background:#fafbfc;border-top:1px solid var(--line)}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <img id="logo" alt="BT"/>
+    <div class="ttl">BT Transport <span>Management</span> — Fleet Compliance</div>
+    <div class="env"><span class="badge">Power Apps · Dataverse</span><span>Operator: <b>Northern Haulage Ltd</b></span><span>Beavan ▾</span></div>
+  </div>
+  <div class="wrap">
+    <nav class="side">
+      <a><span class="ic">▦</span> Dashboard</a>
+      <a class="on"><span class="ic">🚚</span> Fleet Register</a>
+      <a><span class="ic">🛻</span> Trailer Register</a>
+      <a><span class="ic">🗓</span> Maintenance Planner</a>
+      <a><span class="ic">🔧</span> Defects</a>
+      <a><span class="ic">🛑</span> Brake Tests</a>
+      <a><span class="ic">📄</span> MOT Register</a>
+      <a><span class="ic">🗂</span> Documents</a>
+      <a><span class="ic">📊</span> Reports</a>
+      <a><span class="ic">📝</span> Audit Log</a>
+    </nav>
+    <div class="main">
+      <div class="head">
+        <div><div class="h1">Fleet Register</div></div>
+        <button class="btn">+ Add Vehicle</button>
+      </div>
+      <div class="sub">All vehicles across your operators · 25 vehicles · click any row to open the full record</div>
+      <div class="toolbar">
+        <div class="search">🔍 Search reg, fleet no, make…</div>
+        <div class="filter">Operator: All ▾</div>
+        <div class="filter">Status: Active ▾</div>
+        <div class="filter">PMI: 6 weeks ▾</div>
+      </div>
+      <div class="card">
+        <table>
+          <thead><tr><th>Reg</th><th>Fleet</th><th>Make / Model</th><th>Operator</th><th>PMI Freq</th><th>MOT Expiry</th><th>Next PMI</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td class="reg">AB12 CDE</td><td>101</td><td>DAF XF 530</td><td>Northern Haulage</td><td>6 wks</td><td>21 Nov 26</td><td>13 Aug 26 <span class="pill a">14d</span></td><td><span class="tag act">Active</span></td></tr>
+            <tr><td class="reg">RJ19 KLM</td><td>108</td><td>Volvo FH 460</td><td>Northern Haulage</td><td>6 wks</td><td>10 Aug 26</td><td>02 Sep 26 <span class="pill g">34d</span></td><td><span class="tag act">Active</span></td></tr>
+            <tr><td class="reg">YT68 WNS</td><td>112</td><td>Scania R450</td><td>Pennine Logistics</td><td>4 wks</td><td>14 Jan 27</td><td>26 Aug 26 <span class="pill g">27d</span></td><td><span class="tag act">Active</span></td></tr>
+            <tr><td class="reg">SD21 OPX</td><td>119</td><td>MAN TGX 18.500</td><td>Pennine Logistics</td><td>6 wks</td><td>03 Oct 26</td><td>04 Sep 26 <span class="pill g">36d</span></td><td><span class="tag act">Active</span></td></tr>
+            <tr><td class="reg">GK70 TRV</td><td>124</td><td>DAF CF 340</td><td>Northern Haulage</td><td>8 wks</td><td>19 Dec 26</td><td>18 Aug 26 <span class="pill a">19d</span></td><td><span class="tag act">Active</span></td></tr>
+            <tr><td class="reg">LP18 ZED</td><td>127</td><td>Mercedes Actros</td><td>Dale Transport</td><td>6 wks</td><td>28 Aug 26</td><td>05 Aug 26 <span class="pill r">6d</span></td><td><span class="tag act">Active</span></td></tr>
+            <tr><td class="reg">MV65 HGT</td><td>131</td><td>Iveco S-Way</td><td>Dale Transport</td><td>6 wks</td><td>02 Feb 27</td><td>11 Sep 26 <span class="pill g">43d</span></td><td><span class="tag">VOR</span></td></tr>
+            <tr><td class="reg">NB22 QWE</td><td>135</td><td>Renault T480</td><td>Northern Haulage</td><td>6 wks</td><td>30 Nov 26</td><td>29 Aug 26 <span class="pill g">30d</span></td><td><span class="tag act">Active</span></td></tr>
+          </tbody>
+        </table>
+        <div class="foot"><span>Showing 8 of 25 vehicles</span><span>Every field editable · full change history kept in Audit Log</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>fetch('logo_b64.txt').then(r=>r.text()).then(b=>{document.getElementById('logo').src='data:image/jpeg;base64,'+b.trim();});</script>
+</body>
+</html>

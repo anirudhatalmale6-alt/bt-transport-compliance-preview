@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>BT Transport — Compliance System (Preview)</title>
+<style>
+  :root{--navy:#071d3a;--navy2:#0d2b52;--gold:#caa344;--muted:#6b7787;--line:#e4e8ee;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#0a1830;display:flex;flex-direction:column}
+  .bar{background:var(--navy);border-bottom:1px solid rgba(202,163,68,.25);padding:10px 16px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+  .bar .brand{color:#fff;font-weight:700;font-size:15px;margin-right:6px}
+  .bar .brand span{color:var(--gold)}
+  .tabs{display:flex;gap:8px;flex-wrap:wrap}
+  .tab{background:rgba(255,255,255,.06);color:#c8d4e4;border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:8px 15px;font-size:13.5px;font-weight:600;cursor:pointer}
+  .tab.on{background:var(--gold);color:#20170a;border-color:var(--gold)}
+  .hint{color:#8ea0ba;font-size:12px;margin-left:auto}
+  .stage{flex:1;background:#eef1f5;overflow:auto}
+  iframe{width:1280px;height:720px;border:0;display:block;margin:0 auto;background:#eef1f5}
+  .note{background:#fff9e9;color:#6b5410;font-size:12.5px;text-align:center;padding:7px 12px;border-bottom:1px solid #efe2b8}
+</style>
+</head>
+<body>
+  <div class="bar">
+    <div class="brand">BT Transport <span>Management</span></div>
+    <div class="tabs">
+      <button class="tab on" data-src="dashboard.html">Dashboard</button>
+      <button class="tab" data-src="fleet.html">Fleet Register</button>
+      <button class="tab" data-src="planner.html">Maintenance Planner</button>
+    </div>
+    <div class="hint">Preview mockups · click the tabs</div>
+  </div>
+  <div class="note">This is a design preview to react to — the real version becomes your live Power Apps once Microsoft 365 is set up. On a phone, scroll sideways to see the full width.</div>
+  <div class="stage"><iframe id="frame" src="dashboard.html"></iframe></div>
+<script>
+  const tabs=document.querySelectorAll('.tab'),f=document.getElementById('frame');
+  tabs.forEach(t=>t.addEventListener('click',()=>{
+    tabs.forEach(x=>x.classList.remove('on'));t.classList.add('on');
+    f.src=t.getAttribute('data-src');
+  }));
+</script>
+</body>
+</html>

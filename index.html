@@ -158,10 +158,10 @@
         <div class="head"><div class="h1">Fleet Register</div><button class="btn">+ Add Vehicle</button></div>
         <div class="sub">All vehicles across your operators &middot; 8 vehicles &middot; click any row to open the full record</div>
         <div class="toolbar">
-          <div class="search">🔍 Search reg, fleet no, make…</div>
-          <div class="filter">Operator: All ▾</div>
-          <div class="filter">Status: Active ▾</div>
-          <div class="filter">PMI: 6 weeks ▾</div>
+          <input class="search" placeholder="🔍 Search reg, fleet no, make…" oninput="filterTable(this)">
+          <select class="filter" onchange="filterTable(this)"><option value="">Operator: All</option><option>Northern Haulage</option><option>Pennine Logistics</option><option>Dale Transport</option><option>Vale Freight</option></select>
+          <select class="filter" onchange="filterTable(this)"><option value="">Status: All</option><option>Active</option><option>VOR</option></select>
+          <select class="filter"><option>PMI: 6 weeks</option><option>PMI: 4 weeks</option><option>PMI: 8 weeks</option></select>
         </div>
         <div class="card">
           <table>
@@ -185,9 +185,9 @@
         <div class="head"><div class="h1">Trailer Register</div><button class="btn">+ Add Trailer</button></div>
         <div class="sub">All trailers across your operators &middot; 4 trailers &middot; LOLER tracked for tail-lifts</div>
         <div class="toolbar">
-          <div class="search">🔍 Search trailer no, type…</div>
-          <div class="filter">Operator: All ▾</div>
-          <div class="filter">Status: Active ▾</div>
+          <input class="search" placeholder="🔍 Search trailer no, type…" oninput="filterTable(this)">
+          <select class="filter" onchange="filterTable(this)"><option value="">Operator: All</option><option>Northern Haulage</option><option>Pennine Logistics</option><option>Dale Transport</option><option>Vale Freight</option></select>
+          <select class="filter" onchange="filterTable(this)"><option value="">Status: All</option><option>Active</option><option>VOR</option></select>
         </div>
         <div class="card">
           <table>
@@ -245,10 +245,59 @@
         </table></div>
       </div>
 
-      <div class="screen" id="brake"><div class="ph"><div class="pic">🛑</div><h2>Brake Test Register</h2><p>Laden roller-brake test dates and results for every vehicle, with automatic reminders on the DVSA-recommended schedule and full pass/fail history retained for audit.</p><span class="chip">Part of the full build</span></div></div>
-      <div class="screen" id="docs"><div class="ph"><div class="pic">🗂</div><h2>Document Library</h2><p>Every PMI sheet, MOT certificate, brake test and defect sign-off stored against its vehicle &mdash; with the paperwork-lock rule: a red item can't turn green until the certificate is uploaded. DVSA Public Inquiry pack generated in one click.</p><span class="chip">Part of the full build</span></div></div>
-      <div class="screen" id="reports"><div class="ph"><div class="pic">📊</div><h2>Reports</h2><p>Branded PDF &amp; Excel compliance reports &mdash; fleet status, upcoming maintenance, defect trends, workshop performance and the full DVSA Public Inquiry pack &mdash; exportable and emailable on demand.</p><span class="chip">Part of the full build</span></div></div>
-      <div class="screen" id="audit"><div class="ph"><div class="pic">📝</div><h2>Audit Log</h2><p>Every change to every record &mdash; who, what and when &mdash; kept permanently. So when DVSA ask "when was this booked and who signed it off", the answer is one click away.</p><span class="chip">Part of the full build</span></div></div>
+      <div class="screen" id="brake">
+        <div class="h1">Brake Test Register</div>
+        <div class="sub">Laden roller-brake tests on the DVSA-recommended schedule &middot; full pass/fail history kept for audit</div>
+        <div class="card"><table>
+          <thead><tr><th>Reg</th><th>Last Test</th><th>Result</th><th>Efficiency</th><th>Next Due</th><th>Reminder</th></tr></thead>
+          <tbody>
+            <tr><td class="reg">AB12 CDE</td><td>22 Jul 26</td><td><span class="pill g">Pass</span></td><td>Service 58% &middot; Park 22%</td><td>02 Sep 26</td><td>&mdash;</td></tr>
+            <tr><td class="reg">RJ19 KLM</td><td>07 Jul 26</td><td><span class="pill g">Pass</span></td><td>Service 61% &middot; Park 25%</td><td>18 Aug 26 <span class="pill a">12d</span></td><td>14-day set</td></tr>
+            <tr><td class="reg">LP18 ZED</td><td>10 Jun 26</td><td><span class="pill a">Advisory</span></td><td>Service 51% &middot; Park 18%</td><td>21 Sep 26</td><td>&mdash;</td></tr>
+            <tr><td class="reg">MV65 HGT</td><td>02 Aug 26</td><td><span class="pill r">Fail</span></td><td>Rear brake chamber leak</td><td>Retest required</td><td>VOR</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+      <div class="screen" id="docs">
+        <div class="head"><div class="h1">Document Library</div><button class="btn">+ Upload</button></div>
+        <div class="sub">Every certificate stored against its vehicle &middot; a red item can't turn green until its certificate is uploaded (paperwork-lock)</div>
+        <div class="card"><table>
+          <thead><tr><th>Vehicle</th><th>Document</th><th>Type</th><th>Date</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td class="reg">AB12 CDE</td><td>PMI_AB12CDE_Jul26.pdf</td><td>PMI Sheet</td><td>02 Jul 26</td><td><span class="pill g">On file</span></td></tr>
+            <tr><td class="reg">RJ19 KLM</td><td>MOT_RJ19KLM_2025.pdf</td><td>MOT Certificate</td><td>10 Aug 25</td><td><span class="pill g">On file</span></td></tr>
+            <tr><td class="reg">LP18 ZED</td><td>&mdash;</td><td>PMI Sheet</td><td>Awaiting</td><td><span class="pill r">Missing &mdash; locked</span></td></tr>
+            <tr><td class="reg">MV65 HGT</td><td>Defect_MV65_airleak.pdf</td><td>Defect Sign-off</td><td>04 Aug 26</td><td><span class="pill a">Open</span></td></tr>
+          </tbody>
+        </table>
+        <div class="foot"><span>Showing 4 of 60+ documents</span><span>DVSA Public Inquiry pack generated in one click</span></div></div>
+      </div>
+      <div class="screen" id="reports">
+        <div class="h1">Reports</div>
+        <div class="sub">Branded PDF &amp; Excel reports &mdash; generate on demand, or email straight to an operator</div>
+        <div class="rep-grid">
+          <div class="repcard"><div class="ic2">📋</div><h4>Fleet Compliance Summary</h4><p>RAG status of every vehicle &amp; trailer, right now.</p><button class="genbtn">Generate PDF</button></div>
+          <div class="repcard"><div class="ic2">🗓</div><h4>Upcoming Maintenance</h4><p>PMI, MOT, brake &amp; tacho due in the next 60 days.</p><button class="genbtn">Generate PDF</button></div>
+          <div class="repcard"><div class="ic2">🔧</div><h4>Defect Trends</h4><p>Open &amp; historic defects by vehicle and severity.</p><button class="genbtn">Generate PDF</button></div>
+          <div class="repcard"><div class="ic2">⚖️</div><h4>DVSA Public Inquiry Pack</h4><p>Full evidence bundle for a DVSA inquiry, one click.</p><button class="genbtn">Generate Pack</button></div>
+          <div class="repcard"><div class="ic2">🏭</div><h4>Workshop Performance</h4><p>Turnaround times and cost per operator.</p><button class="genbtn">Generate PDF</button></div>
+          <div class="repcard"><div class="ic2">📧</div><h4>Operator Report</h4><p>Branded monthly report emailed to your client.</p><button class="genbtn">Generate &amp; Email</button></div>
+        </div>
+      </div>
+      <div class="screen" id="audit">
+        <div class="h1">Audit Log</div>
+        <div class="sub">Every change to every record &mdash; who, what and when &mdash; kept permanently</div>
+        <div class="card"><table>
+          <thead><tr><th>When</th><th>User</th><th>Record</th><th>Change</th></tr></thead>
+          <tbody>
+            <tr><td>07 Aug 26 · 07:00</td><td>System</td><td>Reminders</td><td>Daily reminder emails sent (4 vehicles due)</td></tr>
+            <tr><td>05 Aug 26 · 16:42</td><td>Beavan T.</td><td>MV65 HGT</td><td>Status changed Active → VOR (air leak)</td></tr>
+            <tr><td>05 Aug 26 · 09:18</td><td>Beavan T.</td><td>SD21 OPX</td><td>Defect logged — nearside marker light out</td></tr>
+            <tr><td>02 Aug 26 · 14:05</td><td>Beavan T.</td><td>AB12 CDE</td><td>PMI sheet uploaded · Last PMI set 02 Jul 26</td></tr>
+            <tr><td>01 Aug 26 · 11:30</td><td>Beavan T.</td><td>NB22 QWE</td><td>Vehicle added to Vale Freight</td></tr>
+          </tbody>
+        </table></div>
+      </div>
 
     </div>
   </div>
@@ -261,6 +310,92 @@
   }
   document.querySelectorAll('#nav a').forEach(a=>a.addEventListener('click',()=>show(a.dataset.s)));
   /* logo inlined */
+</script>
+<style>
+  input.search,select.filter{font-family:inherit;cursor:pointer}
+  input.search{cursor:text}
+  tbody tr{cursor:pointer}
+  .rep-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .repcard{background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px}
+  .repcard .ic2{font-size:22px}
+  .repcard h4{font-size:14px;color:var(--navy);margin:8px 0 4px}
+  .repcard p{font-size:12px;color:var(--muted);line-height:1.4;margin-bottom:12px;min-height:34px}
+  .genbtn{background:var(--gold);color:#20170a;border:none;font-weight:700;font-size:12.5px;padding:8px 14px;border-radius:7px;cursor:pointer}
+  .ov{position:fixed;inset:0;background:rgba(7,29,58,.45);display:none;align-items:center;justify-content:center;z-index:70}
+  .ov.on{display:flex}
+  .modal{background:#fff;width:440px;max-width:92vw;border-radius:12px;overflow:hidden;box-shadow:0 20px 60px rgba(7,29,58,.35)}
+  .modal .mh{background:var(--navy);color:#fff;padding:15px 20px;font-weight:700;display:flex;justify-content:space-between;align-items:center}
+  .modal .mh .x{cursor:pointer;color:#9fb0c6;font-size:20px;line-height:1}
+  .modal .mb{padding:18px 20px;max-height:60vh;overflow:auto}
+  .modal .fld{margin-bottom:13px}
+  .modal label{display:block;font-size:12px;color:var(--muted);margin-bottom:5px;font-weight:600}
+  .modal input,.modal select{width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:7px;font-size:13px;font-family:inherit}
+  .modal .mf{padding:14px 20px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:10px}
+  .modal .cancel{background:#eef2f7;color:#42506a;border:none;padding:9px 16px;border-radius:7px;font-weight:600;cursor:pointer;font-size:13px}
+  .drawer{position:fixed;top:0;right:0;height:100%;width:420px;max-width:94vw;background:#fff;box-shadow:-14px 0 40px rgba(7,29,58,.22);transform:translateX(100%);transition:transform .22s ease;z-index:80;display:flex;flex-direction:column}
+  .drawer.on{transform:translateX(0)}
+  .drawer .dh{background:var(--navy);color:#fff;padding:16px 20px;position:relative}
+  .drawer .dh .r{font-size:19px;font-weight:800;letter-spacing:.5px}
+  .drawer .dh .m{font-size:12px;color:#9fb0c6;margin-top:2px}
+  .drawer .dh .x{position:absolute;top:14px;right:16px;color:#9fb0c6;cursor:pointer;font-size:22px}
+  .drawer .db{padding:16px 20px;overflow:auto;flex:1}
+  .drow{display:flex;justify-content:space-between;gap:14px;padding:10px 0;border-bottom:1px solid #f0f2f6;font-size:13px}
+  .drow .k{color:var(--muted)}.drow .v{font-weight:600;color:var(--ink);text-align:right}
+  .dsec{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--gold);font-weight:700;margin:16px 0 4px}
+  .sign{border:1.5px dashed #c9d3e0;border-radius:9px;padding:16px;text-align:center;color:var(--muted);font-size:12.5px;margin-top:8px}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--navy);color:#fff;padding:12px 20px;border-radius:9px;font-size:13.5px;font-weight:600;opacity:0;pointer-events:none;transition:.25s;z-index:90;box-shadow:0 8px 24px rgba(7,29,58,.3);border-left:3px solid var(--gold)}
+  .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+<script>
+(function(){
+  function toast(m){let t=document.getElementById('__t');if(!t){t=document.createElement('div');t.id='__t';t.className='toast';document.body.appendChild(t);}t.textContent=m;t.classList.add('on');clearTimeout(t._h);t._h=setTimeout(function(){t.classList.remove('on');},2200);}
+  window.__toast=toast;
+  /* ---- record drawer (click any row) ---- */
+  var dr=document.createElement('div');dr.className='drawer';
+  dr.innerHTML='<div class="dh"><span class="x">&times;</span><div class="r" id="dr_r"></div><div class="m" id="dr_m"></div></div><div class="db" id="dr_b"></div>';
+  document.body.appendChild(dr);
+  dr.querySelector('.x').addEventListener('click',function(){dr.classList.remove('on');});
+  function openRow(tr){
+    var c=tr.querySelectorAll('td');if(!c.length)return;
+    var heads=tr.closest('table').querySelectorAll('thead th');
+    document.getElementById('dr_r').textContent=c[0].innerText.trim();
+    document.getElementById('dr_m').textContent=(c[2]?c[2].innerText.trim():'')+(c[3]?' · '+c[3].innerText.trim():'');
+    var reg=c[0].innerText.trim().replace(/\s/g,'');
+    var h='';for(var i=1;i<c.length;i++){h+='<div class="drow"><span class="k">'+heads[i].innerText+'</span><span class="v">'+c[i].innerHTML+'</span></div>';}
+    h+='<div class="dsec">Documents</div><div class="drow"><span class="k">Last PMI sheet</span><span class="v">PMI_'+reg+'.pdf</span></div><div class="drow"><span class="k">MOT certificate</span><span class="v">On file</span></div>';
+    h+='<div class="dsec">Driver sign-off (tablet)</div><div class="sign">&#9997;&nbsp; Driver signs here on the tablet to confirm the walkaround check<br><span style="font-size:11px">captured with date &amp; time, saved straight to the record</span></div>';
+    document.getElementById('dr_b').innerHTML=h;dr.classList.add('on');
+  }
+  document.querySelectorAll('#fleet tbody tr,#trailers tbody tr,#defects tbody tr,#planner tbody tr,#mot tbody tr,#brake tbody tr,#docs tbody tr').forEach(function(tr){tr.addEventListener('click',function(){openRow(tr);});});
+  /* ---- live search + filter ---- */
+  window.filterTable=function(el){
+    var sc=el.closest('.screen');var s=sc.querySelector('.search');var q=(s?s.value:'').toLowerCase();
+    var vals=[].slice.call(sc.querySelectorAll('select.filter')).map(function(x){return x.value;}).filter(function(v){return v&&!/^PMI:/.test(v);});
+    sc.querySelectorAll('tbody tr').forEach(function(tr){var t=tr.innerText;var ok=t.toLowerCase().indexOf(q)>-1&&vals.every(function(v){return t.indexOf(v)>-1;});tr.style.display=ok?'':'none';});
+  };
+  /* ---- add / upload form modal ---- */
+  var ov=document.createElement('div');ov.className='ov';
+  ov.innerHTML='<div class="modal"><div class="mh"><span id="mt"></span><span class="x" id="mx">&times;</span></div><div class="mb" id="mb"></div><div class="mf"><button class="cancel" id="mc">Cancel</button><button class="btn" id="ms">Save</button></div></div>';
+  document.body.appendChild(ov);
+  function closeForm(){ov.classList.remove('on');}
+  document.getElementById('mx').addEventListener('click',closeForm);
+  document.getElementById('mc').addEventListener('click',closeForm);
+  document.getElementById('ms').addEventListener('click',function(){closeForm();toast('✓ Saved — added to the register');});
+  ov.addEventListener('click',function(e){if(e.target===ov)closeForm();});
+  function openForm(t){
+    document.getElementById('mt').textContent=t;var f;
+    if(/Vehicle/i.test(t)){f='<div class="fld"><label>Registration</label><input placeholder="e.g. AB12 CDE"></div><div class="fld"><label>Fleet number</label><input placeholder="e.g. 142"></div><div class="fld"><label>Make / Model</label><input placeholder="e.g. DAF XF 530"></div><div class="fld"><label>Operator</label><select><option>Northern Haulage</option><option>Pennine Logistics</option><option>Dale Transport</option><option>Vale Freight</option></select></div><div class="fld"><label>PMI frequency</label><select><option>6 weeks</option><option>4 weeks</option><option>8 weeks</option></select></div>';}
+    else if(/Trailer/i.test(t)){f='<div class="fld"><label>Trailer number</label><input placeholder="e.g. TR-22"></div><div class="fld"><label>Type</label><input placeholder="e.g. Curtainsider"></div><div class="fld"><label>Operator</label><select><option>Northern Haulage</option><option>Pennine Logistics</option><option>Dale Transport</option><option>Vale Freight</option></select></div><div class="fld"><label>Tail-lift (LOLER tracked)?</label><select><option>No</option><option>Yes</option></select></div>';}
+    else if(/Upload/i.test(t)){f='<div class="fld"><label>Vehicle</label><input placeholder="e.g. AB12 CDE"></div><div class="fld"><label>Document type</label><select><option>PMI Sheet</option><option>MOT Certificate</option><option>Brake Test</option><option>Defect Sign-off</option></select></div><div class="fld"><label>File</label><input type="file"></div>';}
+    else{f='<div class="fld"><label>Vehicle</label><input placeholder="e.g. AB12 CDE"></div><div class="fld"><label>Defect</label><input placeholder="Describe the defect"></div><div class="fld"><label>Severity</label><select><option>Minor</option><option>Safety-critical</option></select></div>';}
+    document.getElementById('mb').innerHTML=f;ov.classList.add('on');
+  }
+  document.querySelectorAll('.screen .btn').forEach(function(b){b.addEventListener('click',function(e){e.stopPropagation();openForm(b.textContent.replace('+','').trim());});});
+  /* ---- report generate buttons ---- */
+  document.querySelectorAll('.genbtn').forEach(function(b){b.addEventListener('click',function(){var name=b.closest('.repcard').querySelector('h4').textContent;toast('✓ '+name+' — generating…');});});
+  /* ---- dashboard reminders clickable ---- */
+  document.querySelectorAll('.alert').forEach(function(a){a.style.cursor='pointer';a.addEventListener('click',function(){toast('Opening workshop booking…');});});
+})();
 </script>
 </body>
 </html>

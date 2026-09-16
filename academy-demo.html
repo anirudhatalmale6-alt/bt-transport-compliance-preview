@@ -1,0 +1,408 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Driver Training Academy — demo</title>
+<style>
+  :root{
+    --navy:#0d2440; --navy2:#16365c; --gold:#c9a227; --ink:#16212f;
+    --line:#dde3ec; --muted:#66748a; --bg:#eef1f5;
+    --red:#c0392b; --amber:#b57500; --green:#127a12; --blue:#1f5aa8;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--ink)}
+  .wrap{max-width:1180px;margin:0 auto;padding:14px}
+  .demobar{background:var(--gold);color:#2a2100;font-size:13px;font-weight:700;
+           padding:8px 14px;border-radius:5px;margin-bottom:12px;line-height:1.4}
+  .app{background:#fff;border:1px solid #c6cedb;border-radius:7px;overflow:hidden;
+       box-shadow:0 2px 14px rgba(13,36,64,.10)}
+  .bar{background:var(--navy);color:#fff;display:flex;align-items:center;gap:14px;padding:12px 16px}
+  .logo{background:var(--gold);color:var(--navy);font-weight:800;font-size:13px;
+        padding:7px 11px;border-radius:4px;letter-spacing:.5px;white-space:nowrap}
+  .ttl{font-weight:700;font-size:16px;line-height:1.25}
+  .ttl small{display:block;font-weight:400;font-size:12.5px;color:#b9c7dc;margin-top:1px}
+  .who{margin-left:auto;font-size:12px;color:#b9c7dc;text-align:right;line-height:1.35}
+  .tabs{display:flex;gap:0;background:#f3f6fa;border-bottom:1px solid var(--line);overflow-x:auto}
+  .tabs button{flex:0 0 auto;border:0;background:transparent;padding:11px 15px;font-size:13.5px;
+          font-family:inherit;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap}
+  .tabs button:hover{color:var(--navy);background:#e9eef6}
+  .tabs button.on{color:var(--navy);font-weight:700;border-bottom-color:var(--gold);background:#fff}
+  .screen{display:none;padding:18px}
+  .screen.on{display:block}
+  h3{margin:0 0 3px;font-size:17px;color:var(--navy)}
+  .lede{color:var(--muted);font-size:13.5px;margin:0 0 14px}
+  table{width:100%;border-collapse:collapse;font-size:13.5px}
+  th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);
+     padding:7px 8px;border-bottom:1px solid var(--line)}
+  td{padding:9px 8px;border-bottom:1px solid #eef1f6}
+  tr:last-child td{border-bottom:0}
+  .pill{display:inline-block;padding:3px 9px;border-radius:11px;font-size:11.5px;font-weight:700;white-space:nowrap}
+  .r{background:#fbe9e7;color:var(--red)} .a{background:#fdf2d9;color:var(--amber)}
+  .g{background:#e7f5e7;color:var(--green)} .b{background:#e8f0fa;color:var(--blue)}
+  .grey{background:#eef1f5;color:var(--muted)}
+  .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:16px}
+  .tile{background:#f7f9fc;border:1px solid var(--line);border-left:4px solid var(--navy);
+        border-radius:5px;padding:11px 13px}
+  .tile b{display:block;font-size:26px;line-height:1.1;color:var(--navy)}
+  .tile span{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted)}
+  .tile.red{border-left-color:var(--red)} .tile.red b{color:var(--red)}
+  .tile.amb{border-left-color:var(--amber)} .tile.amb b{color:var(--amber)}
+  .tile.grn{border-left-color:var(--green)} .tile.grn b{color:var(--green)}
+  .btn{display:inline-block;background:var(--navy);color:#fff;border:0;border-radius:4px;
+       padding:8px 14px;font-size:13px;font-family:inherit;cursor:pointer;font-weight:600}
+  .btn.ghost{background:#fff;color:var(--navy);border:1px solid #b9c4d4}
+  .btn.gold{background:var(--gold);color:#2a2100}
+  .btn:disabled{background:#c8d0dc;color:#8a95a6;cursor:not-allowed}
+  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .card{border:1px solid var(--line);border-radius:6px;padding:14px;background:#fff}
+  .fld{margin-bottom:11px}
+  .fld label{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.5px;
+             color:var(--muted);margin-bottom:3px}
+  .fld .val{border:1px solid #cdd6e2;border-radius:4px;padding:8px 10px;background:#fafbfd;font-size:13.5px}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
+  .sig{border:1px solid #cdd6e2;border-radius:4px;height:74px;background:#fff;
+       display:flex;align-items:center;justify-content:center}
+  .sig svg{max-width:90%}
+  .q{border:1px solid var(--line);border-radius:6px;padding:14px;margin-bottom:10px;background:#fff}
+  .q .qn{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+  .q .qt{font-weight:600;margin:4px 0 10px;font-size:14.5px}
+  .opt{display:flex;align-items:center;gap:9px;padding:8px 10px;border:1px solid #dfe5ee;
+       border-radius:4px;margin-bottom:6px;font-size:13.5px;cursor:pointer;background:#fff}
+  .opt:hover{background:#f4f7fb}
+  .opt.sel{border-color:var(--navy);background:#eef3fa;font-weight:600}
+  .opt .dot{width:15px;height:15px;border-radius:50%;border:2px solid #b3bfd0;flex:0 0 auto}
+  .opt.sel .dot{border-color:var(--navy);background:var(--navy);box-shadow:inset 0 0 0 3px #fff}
+  .prog{height:7px;background:#e3e9f1;border-radius:4px;overflow:hidden;margin:8px 0 14px}
+  .prog i{display:block;height:100%;background:var(--gold)}
+  .res{text-align:center;padding:22px 14px}
+  .res .big{font-size:52px;font-weight:800;line-height:1;color:var(--green)}
+  .res .lab{font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:5px}
+  .banner{border-radius:5px;padding:11px 13px;font-size:13.5px;margin-bottom:13px}
+  .banner.lock{background:#fbe9e7;border:1px solid #e7bdb7;color:#8c2b20}
+  .banner.ok{background:#e7f5e7;border:1px solid #b6ddb6;color:#0e5c0e}
+  .doc{background:#fff;border:1px solid #c6cedb;border-radius:4px;padding:20px;font-size:12.5px;
+       max-width:640px;margin:0 auto;box-shadow:0 1px 8px rgba(0,0,0,.07)}
+  .doc h4{text-align:center;margin:0 0 3px;font-size:15px;color:var(--navy)}
+  .doc .ref{text-align:center;color:var(--muted);font-size:11px;margin-bottom:13px}
+  .doc table{font-size:12px}
+  .doc td{border:1px solid #d7dde7;padding:6px 8px}
+  .note{font-size:12.5px;color:var(--muted);margin-top:11px;line-height:1.5}
+  @media(max-width:700px){
+    .two{grid-template-columns:1fr}
+    .who{display:none}
+    .ttl{font-size:14px}
+  }
+</style>
+
+<div class="wrap">
+
+<div class="demobar">
+  DEMO ONLY — this is a clickable mock-up to show how the system would look and behave.
+  It is not connected to any data and nothing you type here is saved. Built to show the idea, not to be used.
+</div>
+
+<div class="app">
+  <div class="bar">
+    <div class="logo">YOUR LOGO</div>
+    <div class="ttl">Driver Training Academy
+      <small>Training &amp; Compliance System</small></div>
+    <div class="who">Signed in as<br><b style="color:#fff">A. Trainer</b></div>
+  </div>
+
+  <div class="tabs">
+    <button class="on" onclick="go(0,this)">People</button>
+    <button onclick="go(1,this)">Training Record</button>
+    <button onclick="go(2,this)">Theory Test</button>
+    <button onclick="go(3,this)">Driving Assessment</button>
+    <button onclick="go(4,this)">Sign Off</button>
+    <button onclick="go(5,this)">The PDF</button>
+  </div>
+
+  <!-- 0 PEOPLE -->
+  <div class="screen on">
+    <h3>People</h3>
+    <p class="lede">Everyone you train, from every client company. Search, filter, and see at a glance who needs attention.</p>
+    <div class="tiles">
+      <div class="tile"><b>48</b><span>People on file</span></div>
+      <div class="tile"><b>6</b><span>Client companies</span></div>
+      <div class="tile amb"><b>9</b><span>Due in 30 days</span></div>
+      <div class="tile red"><b>3</b><span>Overdue</span></div>
+    </div>
+    <table>
+      <tr><th>Name</th><th>Client company</th><th>Role</th><th>Theory</th><th>Assessment</th><th>Next due</th></tr>
+      <tr><td><b>J. Ryder</b></td><td>Northern Haulage</td><td>Class 1 Driver</td>
+          <td><span class="pill g">Passed 36/40</span></td><td><span class="pill g">Passed</span></td>
+          <td><span class="pill g">Eyesight — 112 days</span></td></tr>
+      <tr><td><b>D. Whitworth</b></td><td>Pennine Logistics</td><td>Class 2 Driver</td>
+          <td><span class="pill g">Passed 34/40</span></td><td><span class="pill a">Booked</span></td>
+          <td><span class="pill a">Medical — 21 days</span></td></tr>
+      <tr><td><b>M. Ellis</b></td><td>Dale Transport</td><td>Lorry Loader</td>
+          <td><span class="pill a">In progress</span></td><td><span class="pill grey">Locked</span></td>
+          <td><span class="pill g">Eyesight — 64 days</span></td></tr>
+      <tr><td><b>S. Ahmed</b></td><td>Northern Haulage</td><td>Class 1 Driver</td>
+          <td><span class="pill r">Failed 29/40</span></td><td><span class="pill grey">Locked</span></td>
+          <td><span class="pill r">Medical — 12 days OVERDUE</span></td></tr>
+      <tr><td><b>V. Chibwe</b></td><td>Vale Distribution</td><td>Van Driver</td>
+          <td><span class="pill g">Passed 38/40</span></td><td><span class="pill g">Passed</span></td>
+          <td><span class="pill g">Eyesight — 155 days</span></td></tr>
+    </table>
+    <p class="note">Notice S. Ahmed — failed the theory, so the driving assessment is <b>Locked</b>. The system will not let anyone
+       be assessed before they have passed. That rule is enforced by the software, not by somebody remembering.</p>
+  </div>
+
+  <!-- 1 TRAINING RECORD -->
+  <div class="screen">
+    <h3>Training Record — D. Whitworth</h3>
+    <p class="lede">Everything this driver has signed, which version, and what is falling due. Same traffic-light engine as a fleet system, pointed at people instead of trucks.</p>
+    <div class="card" style="margin-bottom:14px">
+      <div class="two">
+        <div class="fld"><label>Full name</label><div class="val">David Whitworth</div></div>
+        <div class="fld"><label>Client company</label><div class="val">Pennine Logistics Ltd</div></div>
+        <div class="fld"><label>Licence categories</label><div class="val">C, C+E</div></div>
+        <div class="fld"><label>Personal folder</label><div class="val">48 documents on file</div></div>
+      </div>
+      <div class="row">
+        <button class="btn ghost">Open folder</button>
+        <button class="btn ghost">Upload document</button>
+        <button class="btn ghost">Sign-off history</button>
+      </div>
+    </div>
+    <table>
+      <tr><th>Document / requirement</th><th>Version</th><th>Last signed</th><th>Status</th></tr>
+      <tr><td>Safe Working Practice — Loading &amp; Securing</td><td>V3</td><td>04 Aug 2026</td><td><span class="pill g">Current</span></td></tr>
+      <tr><td>Driver Handbook</td><td>V2</td><td>04 Aug 2026</td><td><span class="pill b">New version V3 — re-sign needed</span></td></tr>
+      <tr><td>Annual Medical Declaration</td><td>—</td><td>28 Sep 2025</td><td><span class="pill a">Due in 21 days</span></td></tr>
+      <tr><td>Eyesight Check</td><td>—</td><td>12 Jun 2026</td><td><span class="pill g">Due in 64 days</span></td></tr>
+      <tr><td>WTD Declaration</td><td>—</td><td>11 Jan 2026</td><td><span class="pill g">Current</span></td></tr>
+      <tr><td>Theory Test</td><td>Test 4</td><td>14 Sep 2026</td><td><span class="pill g">Passed 34 / 40</span></td></tr>
+    </table>
+    <p class="note">The <b>Driver Handbook</b> row is the one that earns its keep. He signed V2. You have since issued V3.
+       The system knows he has not signed the current version and says so — nobody has to cross-reference anything.</p>
+  </div>
+
+  <!-- 2 THEORY -->
+  <div class="screen">
+    <h3>Theory Test</h3>
+    <p class="lede">One of ten tests, 40 questions, pass mark 32. Taken on the tablet or the PC.</p>
+    <div id="quiz">
+      <div class="row" style="justify-content:space-between;margin-bottom:4px">
+        <div style="font-size:13px;color:var(--muted)">Test 4 of 10 &middot; Question <b id="qn">1</b> of 40</div>
+        <div style="font-size:13px;color:var(--muted)">Pass mark 32 / 40</div>
+      </div>
+      <div class="prog"><i id="bar" style="width:2.5%"></i></div>
+      <div class="q">
+        <div class="qn">Question <span id="qn2">1</span></div>
+        <div class="qt" id="qt">You are driving a 44 tonne articulated lorry. What is the national speed limit on a dual carriageway?</div>
+        <div id="opts">
+          <div class="opt" onclick="pick(this)"><span class="dot"></span><span>50 mph</span></div>
+          <div class="opt" onclick="pick(this)"><span class="dot"></span><span>56 mph</span></div>
+          <div class="opt" onclick="pick(this)"><span class="dot"></span><span>60 mph</span></div>
+          <div class="opt" onclick="pick(this)"><span class="dot"></span><span>70 mph</span></div>
+        </div>
+      </div>
+      <div class="row">
+        <button class="btn" onclick="next()">Next question</button>
+        <button class="btn ghost" onclick="finish()">Skip to result</button>
+      </div>
+      <p class="note">Your questions, your wording. I build the engine that serves them, marks them and records the score —
+         you and your partner write the 400 questions.</p>
+    </div>
+
+    <div id="result" style="display:none">
+      <div class="card res">
+        <div class="big">34 / 40</div>
+        <div class="lab">Pass &middot; Test 4 &middot; 16 Sep 2026</div>
+        <div style="margin-top:16px"><span class="pill g" style="font-size:13px;padding:6px 14px">PASSED — pass mark 32</span></div>
+      </div>
+      <div class="banner ok" style="margin-top:14px">
+        <b>Driving Assessment unlocked.</b> Because this driver passed, the assessment form is now available for him.
+      </div>
+      <div class="row"><button class="btn gold" onclick="unlock()">Go to Driving Assessment &rarr;</button>
+        <button class="btn ghost" onclick="reset()">Run the test again</button></div>
+    </div>
+  </div>
+
+  <!-- 3 ASSESSMENT -->
+  <div class="screen">
+    <h3>Driving Assessment</h3>
+    <div id="locked">
+      <div class="banner lock"><b>Locked.</b> This driver has not passed the theory test yet.
+        The assessment cannot be started until there is a pass of 32 or more on file.</div>
+      <div class="card" style="opacity:.45;pointer-events:none">
+        <div class="two">
+          <div class="fld"><label>Driver</label><div class="val">S. Ahmed</div></div>
+          <div class="fld"><label>Theory result</label><div class="val">Failed — 29 / 40</div></div>
+        </div>
+        <button class="btn" disabled>Start assessment</button>
+      </div>
+      <p class="note">This is the gate working. Go to the Theory Test tab, pass it, and this screen changes.</p>
+    </div>
+
+    <div id="unlocked" style="display:none">
+      <div class="banner ok"><b>Theory passed 34/40 — assessment unlocked.</b></div>
+      <div class="card" style="margin-bottom:12px">
+        <div style="font-weight:700;color:var(--navy);margin-bottom:9px">Part 1 &middot; Driver details</div>
+        <div class="two">
+          <div class="fld"><label>Driver</label><div class="val">David Whitworth</div></div>
+          <div class="fld"><label>Licence number</label><div class="val">WHITW••••••••99</div></div>
+          <div class="fld"><label>Vehicle used</label><div class="val">YT68 WNS — Volvo FH 460</div></div>
+          <div class="fld"><label>Mileage covered</label><div class="val">18.4 miles</div></div>
+        </div>
+      </div>
+      <div class="card" style="margin-bottom:12px">
+        <div style="font-weight:700;color:var(--navy);margin-bottom:9px">Part 2 &middot; Assessed items and score</div>
+        <table>
+          <tr><th>Assessed</th><th>Score</th><th></th></tr>
+          <tr><td>Vehicle checks before moving off</td><td><b>5 / 5</b></td><td><span class="pill g">Good</span></td></tr>
+          <tr><td>Mirror and blind spot use</td><td><b>4 / 5</b></td><td><span class="pill g">Good</span></td></tr>
+          <tr><td>Junctions and roundabouts</td><td><b>3 / 5</b></td><td><span class="pill a">Needs work</span></td></tr>
+          <tr><td>Reversing and manoeuvring</td><td><b>4 / 5</b></td><td><span class="pill g">Good</span></td></tr>
+          <tr><td>Fuel-efficient driving</td><td><b>3 / 5</b></td><td><span class="pill a">Needs work</span></td></tr>
+          <tr><td>Load security awareness</td><td><b>5 / 5</b></td><td><span class="pill g">Good</span></td></tr>
+        </table>
+      </div>
+      <div class="card">
+        <div style="font-weight:700;color:var(--navy);margin-bottom:9px">Part 3 &middot; Assessor's report</div>
+        <div class="fld"><label>Written report</label>
+          <div class="val" style="min-height:62px">Confident and safe throughout. Good vehicle checks and load awareness.
+            Approach speed into two roundabouts was a little high — coached at the time and improved on the second half of the route.
+            Recommend a follow-up on fuel-efficient driving within 6 months.</div></div>
+        <div class="two">
+          <div class="fld"><label>Overall result</label><div class="val"><span class="pill g">PASS</span></div></div>
+          <div class="fld"><label>Total score</label><div class="val"><b>24 / 30</b></div></div>
+        </div>
+        <button class="btn gold" onclick="go(4,document.querySelectorAll('.tabs button')[4])">Continue to sign off &rarr;</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4 SIGN OFF -->
+  <div class="screen">
+    <h3>Sign Off</h3>
+    <p class="lede">Both parties sign on the tablet. The signature is the proof — captured on the form itself, with the name and the time.</p>
+    <div class="card">
+      <div class="two">
+        <div class="fld"><label>Driver signature</label>
+          <div class="sig">
+            <svg viewBox="0 0 320 70" height="60"><path d="M16 50 C44 8, 62 62, 86 30 S128 6, 150 44 C166 20, 186 54, 214 26 C232 12, 252 44, 290 24"
+              fill="none" stroke="#14202f" stroke-width="2.4" stroke-linecap="round"/></svg>
+          </div>
+          <div style="font-size:12px;color:var(--muted);margin-top:5px">D. Whitworth &middot; 16 Sep 2026, 14:42</div>
+        </div>
+        <div class="fld"><label>Assessor signature</label>
+          <div class="sig">
+            <svg viewBox="0 0 320 70" height="60"><path d="M20 46 C40 16, 70 58, 96 24 C114 4, 130 56, 156 34 C182 14, 198 52, 232 28 C254 14, 272 40, 296 30"
+              fill="none" stroke="#14202f" stroke-width="2.4" stroke-linecap="round"/></svg>
+          </div>
+          <div style="font-size:12px;color:var(--muted);margin-top:5px">A. Trainer &middot; Driver Assessor &middot; 16 Sep 2026, 14:42</div>
+        </div>
+      </div>
+      <div class="two">
+        <div class="fld"><label>Assessor name</label><div class="val">A. Trainer</div></div>
+        <div class="fld"><label>Position / title</label><div class="val">Driver Assessor</div></div>
+      </div>
+      <div class="row">
+        <button class="btn gold" onclick="go(5,document.querySelectorAll('.tabs button')[5])">Save &amp; produce document</button>
+        <button class="btn ghost">Refused / unable to sign</button>
+      </div>
+    </div>
+    <p class="note">The <b>Refused / unable to sign</b> option matters. If someone will not sign, that gets recorded properly
+       rather than the record simply being left blank.</p>
+  </div>
+
+  <!-- 5 PDF -->
+  <div class="screen">
+    <h3>The document that comes out</h3>
+    <p class="lede">Saved to the driver's folder, and emailed to the client company as a PDF.</p>
+    <div class="doc">
+      <h4>Driving Assessment Record</h4>
+      <div class="ref">Driver Training Academy &middot; Ref DA-2026-0147 &middot; Issued 16 September 2026</div>
+      <table>
+        <tr><td style="width:32%;background:#f4f7fb"><b>Driver</b></td><td>David Whitworth</td></tr>
+        <tr><td style="background:#f4f7fb"><b>Client company</b></td><td>Pennine Logistics Ltd</td></tr>
+        <tr><td style="background:#f4f7fb"><b>Vehicle / mileage</b></td><td>YT68 WNS — Volvo FH 460 &middot; 18.4 miles</td></tr>
+        <tr><td style="background:#f4f7fb"><b>Theory test</b></td><td>Test 4 — passed 34 / 40 on 14 Sep 2026</td></tr>
+        <tr><td style="background:#f4f7fb"><b>Assessment score</b></td><td>24 / 30</td></tr>
+        <tr><td style="background:#f4f7fb"><b>Result</b></td><td><b style="color:#127a12">PASS</b></td></tr>
+      </table>
+      <p style="margin:11px 0 5px"><b>Assessor's report</b></p>
+      <p style="margin:0;color:#333">Confident and safe throughout. Good vehicle checks and load awareness. Approach speed into
+        two roundabouts was a little high — coached at the time and improved on the second half of the route.
+        Recommend a follow-up on fuel-efficient driving within 6 months.</p>
+      <table style="margin-top:13px">
+        <tr>
+          <td style="width:50%"><b>Driver signature</b><br>
+            <svg viewBox="0 0 320 70" height="42"><path d="M16 50 C44 8, 62 62, 86 30 S128 6, 150 44 C166 20, 186 54, 214 26 C232 12, 252 44, 290 24" fill="none" stroke="#14202f" stroke-width="3" stroke-linecap="round"/></svg>
+            <br>D. Whitworth &middot; 16/09/2026</td>
+          <td><b>Assessor signature</b><br>
+            <svg viewBox="0 0 320 70" height="42"><path d="M20 46 C40 16, 70 58, 96 24 C114 4, 130 56, 156 34 C182 14, 198 52, 232 28 C254 14, 272 40, 296 30" fill="none" stroke="#14202f" stroke-width="3" stroke-linecap="round"/></svg>
+            <br>A. Trainer, Driver Assessor &middot; 16/09/2026</td>
+        </tr>
+      </table>
+    </div>
+    <div class="row" style="justify-content:center;margin-top:14px">
+      <button class="btn">Email to client company</button>
+      <button class="btn ghost">Save to driver's folder</button>
+    </div>
+    <p class="note" style="text-align:center">This is the bit the client company actually receives — proof, on headed paper, with both signatures and the score.</p>
+  </div>
+</div>
+
+<p class="note" style="text-align:center;max-width:720px;margin:16px auto 0">
+  Mock-up prepared for Beavan Tafirenyika, 16 September 2026. Logo and academy name are placeholders — your branding drops straight in.
+  Nothing here is copied from any existing system; the layout and wording are original.
+</p>
+</div>
+
+<script>
+  function go(i, el){
+    document.querySelectorAll('.screen').forEach((s,n)=>s.classList.toggle('on', n===i));
+    document.querySelectorAll('.tabs button').forEach(b=>b.classList.remove('on'));
+    if(el) el.classList.add('on');
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+  var QS=[
+    ["You are driving a 44 tonne articulated lorry. What is the national speed limit on a dual carriageway?",
+      ["50 mph","56 mph","60 mph","70 mph"]],
+    ["What is the maximum continuous driving time before a break must be taken?",
+      ["3 hours","4 hours 30 minutes","5 hours","6 hours"]],
+    ["A load has shifted during a journey. What should you do first?",
+      ["Carry on and report at the depot","Stop as soon as it is safe and check the load","Increase speed to reach the delivery","Brake hard to reseat the load"]],
+    ["How long must a daily rest period normally be?",
+      ["9 hours","10 hours","11 hours","12 hours"]]
+  ];
+  var i=0;
+  function pick(el){
+    el.parentNode.querySelectorAll('.opt').forEach(o=>o.classList.remove('sel'));
+    el.classList.add('sel');
+  }
+  function next(){
+    i=(i+1)%QS.length;
+    var n=Math.min(40, (i+1));
+    document.getElementById('qn').textContent=n;
+    document.getElementById('qn2').textContent=n;
+    document.getElementById('qt').textContent=QS[i][0];
+    var o=document.getElementById('opts'); o.innerHTML='';
+    QS[i][1].forEach(function(t){
+      var d=document.createElement('div'); d.className='opt';
+      d.onclick=function(){pick(d)};
+      d.innerHTML='<span class="dot"></span><span>'+t+'</span>';
+      o.appendChild(d);
+    });
+    document.getElementById('bar').style.width=(n/40*100)+'%';
+  }
+  function finish(){
+    document.getElementById('quiz').style.display='none';
+    document.getElementById('result').style.display='block';
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+  function reset(){
+    document.getElementById('quiz').style.display='block';
+    document.getElementById('result').style.display='none';
+    document.getElementById('locked').style.display='block';
+    document.getElementById('unlocked').style.display='none';
+  }
+  function unlock(){
+    document.getElementById('locked').style.display='none';
+    document.getElementById('unlocked').style.display='block';
+    go(3, document.querySelectorAll('.tabs button')[3]);
+  }
+</script>
